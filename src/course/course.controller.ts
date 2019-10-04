@@ -8,6 +8,7 @@ import {
   Param,
   Logger,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './courses.entity';
@@ -35,14 +36,12 @@ export class CourseController {
     return this.courseService.getCourses();
   }
 
-  @Post()
-  create(@Body() course: Course) {
-    return this.courseService.saveCourse(course);
-  }
-
-  @Put()
-  update(@Body() course: Course) {
-    return this.courseService.saveCourse(course);
+  @Post('/save')
+  savve(@Body() course: Course) {
+    return this.courseService.saveCourse(course).catch(err => {
+      Logger.error(err);
+      throw new InternalServerErrorException(err.message);
+    });
   }
 
   @Delete(':id')
