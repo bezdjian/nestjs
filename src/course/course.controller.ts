@@ -15,7 +15,23 @@ import { Course } from './courses.entity';
 
 @Controller('course')
 export class CourseController {
-  constructor(private courseService: CourseService) {}
+
+  endpoints = [
+    'Endoints', [
+      '/get/:id',
+      '/all',
+      '/save',
+      ':id'
+    ]
+  ];
+
+  constructor(private courseService: CourseService) { }
+
+  // Default
+  @Get('/')
+  default() {
+    return this.endpoints;
+  }
 
   @Get('/get/:id')
   async get(@Param() params) {
@@ -30,6 +46,7 @@ export class CourseController {
       }
     });
   }
+
   @Get('/all')
   async getAll() {
     Logger.log('***** Getting all courses');
@@ -37,7 +54,7 @@ export class CourseController {
   }
 
   @Post('/save')
-  savve(@Body() course: Course) {
+  save(@Body() course: Course) {
     return this.courseService.saveCourse(course).catch(err => {
       Logger.error(err);
       throw new InternalServerErrorException(err.message);
