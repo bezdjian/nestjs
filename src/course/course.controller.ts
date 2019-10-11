@@ -1,25 +1,31 @@
 import {
-  Controller,
-  Post,
   Body,
-  Get,
-  Put,
+  Controller,
   Delete,
-  Param,
-  Logger,
-  NotFoundException,
-  InternalServerErrorException,
-  Res,
+  Get,
   HttpStatus,
+  InternalServerErrorException,
+  Logger,
+  Param,
+  Post,
+  Res,
 } from '@nestjs/common';
+import { CourseDto } from '../response/CourseDto';
+import { ResponseDto } from '../response/ResponseDto';
 import { CourseService } from './course.service';
 import { Course } from './courses.entity';
-import { ResponseDto } from '../response/ResponseDto';
-import { CourseDto } from '../response/CourseDto';
 
 @Controller('course')
 export class CourseController {
+  endpoints = ['Endoints', ['/get/:id', '/all', '/save', ':id']];
+
   constructor(private courseService: CourseService) {}
+
+  // Default
+  @Get('/')
+  default() {
+    return this.endpoints;
+  }
 
   @Get('/get/:id')
   async get(@Param() params, @Res() res) {
@@ -47,18 +53,18 @@ export class CourseController {
         throw new InternalServerErrorException(err.message);
       });
   }
+
   @Get('/all')
   async getAll() {
     Logger.log('***** Getting all courses');
-    return this.courseService.getCourses()
-      .then(courses => {
-        Logger.log(courses);
-        const dtoList = new Array();
-        courses.map(c => {
-          dtoList.push(new CourseDto(c));
-        });
-        return dtoList;
+    return this.courseService.getCourses().then(courses => {
+      Logger.log(courses);
+      const dtoList = new Array();
+      courses.map(c => {
+        dtoList.push(new CourseDto(c));
       });
+      return dtoList;
+    });
   }
 
   @Post('/save')
