@@ -30,9 +30,11 @@ export class Course {
   price: number;
 
   @ManyToMany(type => Student)
-  students: Student[];
+  public students: Student[];
 
-  @ManyToOne(type => Category, category => category.course)
-  @JoinColumn({ name: 'categoryId' })
-  category: Category;
+  @ManyToOne(type => Category, category => category.course, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn({ name: 'categoryId', referencedColumnName: 'id' })
+  public category: Category;
 }

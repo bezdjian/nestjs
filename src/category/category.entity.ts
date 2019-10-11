@@ -12,6 +12,6 @@ export class Category {
   @Column()
   name: string;
 
-  @OneToMany(type => Course, course => course.category)
+  @OneToMany(type => Course, course => course.category, { cascade: true})
   course: Course[];
 }

@@ -10,18 +10,26 @@ export class CourseService {
   ) {}
 
   async getCourses(): Promise<Course[]> {
-    return await this.courseRepository.find();
+    return await this.courseRepository.find({
+      order: {
+        id: 'DESC',
+      },
+      relations: ['category'],
+    });
   }
 
   async getCourse(courseId: number): Promise<Course> {
-    return await this.courseRepository.findOne(courseId);
+    return await this.courseRepository.findOne({
+      where: { id: courseId },
+      relations: ['category'],
+    });
   }
 
   async saveCourse(course: Course) {
     return this.courseRepository.save(course);
   }
 
-  async deleteCourse(course: Course) {
-    this.courseRepository.delete(course);
+  async deleteCourse(courseId: number) {
+    return this.courseRepository.delete(courseId);
   }
 }

@@ -20,4 +20,7 @@ export class StudentService {
   async save(student: Student) {
     return await this.studentRepository.save(student);
   }
+  async delete(studentId: number){
+    return await this.studentRepository.delete(studentId);
+  }
 }
