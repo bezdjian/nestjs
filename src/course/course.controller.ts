@@ -17,7 +17,15 @@ import { Course } from './courses.entity';
 
 @Controller('course')
 export class CourseController {
-  endpoints = ['Endoints', ['/get/:id', '/all', '/save', ':id']];
+  endpoints = [
+    'EndPoints',
+    {
+      'Get one course': '/get/:id',
+      'Get all courses': '/all',
+      'Save a course': '/save',
+      'Delete a course': '/delete/:id',
+    },
+  ];
 
   constructor(private courseService: CourseService) {}
 
@@ -34,7 +42,7 @@ export class CourseController {
       .then(c => {
         if (c == null) {
           const err = 'Course with ID ' + params.id + ' not found';
-          Logger.error(err);
+          Logger.warn(err);
           res
             .status(HttpStatus.NOT_FOUND)
             .json(new ResponseDto(404, err))
